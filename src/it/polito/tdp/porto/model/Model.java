@@ -1,6 +1,7 @@
 package it.polito.tdp.porto.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,21 +34,25 @@ public class Model {
 		for(CoAuthors c: coList) {
 			grafo.addEdge(idMap.get(c.getA1()), idMap.get(c.getA2()));
 		}
+		/*
 		System.out.println("Numero vertici: " +grafo.vertexSet().size());
 		System.out.println("Numero archi: " +grafo.edgeSet().size());
-		// System.out.println(Graphs.neighborListOf(grafo, idMap.get(579)));
+		//System.out.println(Graphs.neighborListOf(grafo, idMap.get(2189)));
 		
 		List<Author> camminoMinimo = trovaCamminoMinimo(idMap.get(579), idMap.get(4620));
 		System.out.println(camminoMinimo);
 		List<Paper> paperList = trovaSequenzaArticoli(camminoMinimo);
 		System.out.println(paperList);
-		
+		*/
 		
 	}
 	
 	public List<Author> trovaCamminoMinimo(Author partenza, Author arrivo) {
 		DijkstraShortestPath<Author, DefaultEdge> dijstra = new DijkstraShortestPath<>(this.grafo) ;
 		GraphPath<Author, DefaultEdge> path = dijstra.getPath(partenza, arrivo);
+		if(path == null) {
+			return null;
+		}
 		return path.getVertexList() ;
 	}
 
@@ -67,4 +72,40 @@ public class Model {
 		
 		return paperList;
 	}
+	/*
+	public List<Paper> sequenzaArticoli(Author source, Author target) {
+		List<Author> a = trovaCamminoMinimo(source, target);
+		if(a == null) {
+			return null;
+		}
+		List<Paper> b = trovaSequenzaArticoli(a);
+		return b;
+	}
+	*/
+	
+	public List<Author> getAuthorList() {
+		List<Author> autori = dao.getAllAutori(idMap);
+		Collections.sort(autori);
+		return autori;
+	}
+	
+	public List<Author> trovaVicini(Author author) {
+		creaGrafo();
+		return Graphs.neighborListOf(this.grafo, author);
+	}
+	
+	public boolean sonoCoautori(Author a, Author b) {
+		creaGrafo();
+		boolean result = false;
+		if(grafo.containsEdge(a, b)) {
+			result = true;
+		}
+		return result;
+	}
+	
+
+	
+	
+
+
 }

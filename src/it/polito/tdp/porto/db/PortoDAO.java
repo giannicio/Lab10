@@ -141,7 +141,7 @@ public class PortoDAO {
 			
 			ResultSet rs = st.executeQuery();
 
-			if (rs.next()) {
+			if(rs.next()) {
 				int paperId = rs.getInt("c1.eprintid");
 				return paperId;
 			}

@@ -68,7 +68,7 @@ public class Paper {
 
 	@Override
 	public String toString() {
-		return "eprintid= " + eprintid;
+		return eprintid +" - " +title;
 	}
 
 	@Override
